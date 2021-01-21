@@ -75,7 +75,7 @@ class Classifier(object):
             else:
                 y[k] = v
 
-    def getSum(a, b):
+    def getSum(self,a, b):
         for key in b:
             if key not in a:
                 return b
@@ -83,7 +83,7 @@ class Classifier(object):
                 a[key] = a[key] + b[key]
         return a
 
-    def getAverage(b, num):
+    def getAverage(self,b, num):
         for key in b:
             b[key] = b[key] / num
         return b
