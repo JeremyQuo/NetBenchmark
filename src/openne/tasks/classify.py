@@ -44,7 +44,7 @@ class Classifier(object):
         results = {}
         for average in averages:
             results[average] = f1_score(Y, np.asarray(Y_), average=average)
-        print(results)
+        #print(results)
         return results
 
     def predict(self, X, top_k_list):
@@ -99,6 +99,7 @@ class Classifier(object):
             self.train(X_train, Y_train, Y)
             results = self.getSum(results,self.evaluate(X_test, Y_test))
         results=self.getAverage(results,train_percent)
+        print(results)
         return results
 
 
