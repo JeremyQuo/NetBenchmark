@@ -6,6 +6,7 @@ import torch
 from sklearn.multiclass import OneVsRestClassifier # data training. TODO: write a PyTorch version of OVRClassifier
 from sklearn.metrics import f1_score  # data process
 from sklearn.preprocessing import MultiLabelBinarizer # data process
+from sklearn.model_selection import KFold # data process
 from time import time
 
 
@@ -65,6 +66,16 @@ class Classifier(object):
         self.train(X_train, Y_train, Y)
         torch.random.set_rng_state(state)
         return self.evaluate(X_test, Y_test)
+
+    def split_train_evaluate2(self, X, Y, train_percent, seed=None):
+        kf = KFold(n_splits=5,random_state=0, shuffle=False)
+        if seed is not None:
+            torch.random.manual_seed(seed)
+        for train_index, test_index in kf.split(X):
+            X_train, Y_train = X[train_index], Y[train_index]
+            X_test, Y_test = X[test_index], Y[test_index]
+            self.train(X_train, Y_train, Y)
+            return self.evaluate(X_test, Y_test)
 
 
 def load_embeddings(filename):
