@@ -1,7 +1,7 @@
 # we do not need change this
 
 from __future__ import print_function
-import numpy
+import numpy as np
 import torch
 from sklearn.multiclass import OneVsRestClassifier # data training. TODO: write a PyTorch version of OVRClassifier
 from sklearn.metrics import f1_score  # data process
@@ -80,8 +80,8 @@ class Classifier(object):
         if seed is not None:
             torch.random.manual_seed(seed)
         for train_index, test_index in kf.split(X):
-            X_train, Y_train = X[train_index], Y[train_index]
-            X_test, Y_test = X[test_index], Y[test_index]
+            X_train, Y_train = np.array(X)[train_index], np.array(Y)[train_index]
+            X_test, Y_test = np.array(X)[test_index], np.array(Y)[test_index]
             self.train(X_train, Y_train, Y)
             results = self.merge_dict(results,self.evaluate(X_test, Y_test))
         return results
