@@ -67,15 +67,24 @@ class Classifier(object):
         torch.random.set_rng_state(state)
         return self.evaluate(X_test, Y_test)
 
+    def merge_dict(x, y):
+        for k, v in x.items():
+            if k in y.keys():
+                y[k] += v
+                y[k] = y[k]/2
+            else:
+                y[k] = v
     def split_train_evaluate2(self, X, Y, train_percent, seed=None):
-        kf = KFold(n_splits=5,random_state=0, shuffle=False)
+        results = {}
+        kf = KFold(n_splits=train_percent,random_state=0, shuffle=False)
         if seed is not None:
             torch.random.manual_seed(seed)
         for train_index, test_index in kf.split(X):
             X_train, Y_train = X[train_index], Y[train_index]
             X_test, Y_test = X[test_index], Y[test_index]
             self.train(X_train, Y_train, Y)
-            return self.evaluate(X_test, Y_test)
+            results = self.merge_dict(results,self.evaluate(X_test, Y_test))
+        return results
 
 
 def load_embeddings(filename):
