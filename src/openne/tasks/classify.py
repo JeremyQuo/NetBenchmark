@@ -12,7 +12,7 @@ from time import time
 
 class TopKRanker(OneVsRestClassifier):
     def predict(self, X, top_k_list):
-        probs = torch.tensor(super(TopKRanker, self).predict_proba(numpy.asarray(X)))  # assume X as a Tensor
+        probs = torch.tensor(super(TopKRanker, self).predict_proba(np.asarray(X)))  # assume X as a Tensor
         all_labels = []
         for i, k in enumerate(top_k_list):
             probs_ = probs[i, :]
@@ -43,7 +43,7 @@ class Classifier(object):
         averages = ["micro", "macro", "samples", "weighted"]
         results = {}
         for average in averages:
-            results[average] = f1_score(Y, numpy.asarray(Y_), average=average)
+            results[average] = f1_score(Y, np.asarray(Y_), average=average)
         print(results)
         return results
 
@@ -74,7 +74,21 @@ class Classifier(object):
                 y[k] = y[k]/2
             else:
                 y[k] = v
-    def split_train_evaluate2(self, X, Y, train_percent, seed=None):
+
+    def getSum(a, b):
+        for key in b:
+            if key not in a:
+                return b
+            else:
+                a[key] = a[key] + b[key]
+        return a
+
+    def getAverage(b, num):
+        for key in b:
+            b[key] = b[key] / num
+        return b
+
+    def split_train_evaluate2(self, X, Y, train_percent=5, seed=None):
         results = {}
         kf = KFold(n_splits=train_percent,random_state=0, shuffle=False)
         if seed is not None:
@@ -83,7 +97,8 @@ class Classifier(object):
             X_train, Y_train = np.array(X)[train_index], np.array(Y)[train_index]
             X_test, Y_test = np.array(X)[test_index], np.array(Y)[test_index]
             self.train(X_train, Y_train, Y)
-            results = self.merge_dict(results,self.evaluate(X_test, Y_test))
+            results = self.getSum(results,self.evaluate(X_test, Y_test))
+        results=self.getAverage(results,train_percent)
         return results
 
 

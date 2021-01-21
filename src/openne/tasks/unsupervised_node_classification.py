@@ -33,4 +33,5 @@ class UnsupervisedNodeClassification(BaseTask):
         print("Training classifier using {:.2f}% nodes...".format(
             self.kwargs['clf_ratio']*100))
         clf = Classifier(vectors=vectors, clf=svm.SVC(probability=True))
-        return clf.split_train_evaluate(X, Y, self.train_kwargs()['clf_ratio'], seed=seed)
+        return clf.split_train_evaluate2(X, Y, 5, seed=seed)
+        #return clf.split_train_evaluate(X, Y, self.train_kwargs()['clf_ratio'], seed=seed)
