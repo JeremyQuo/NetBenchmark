@@ -11,7 +11,8 @@ from .gcn.gcnAPI import GCN
 from .models import ModelWithEmbeddings
 from .gae import GAE
 from .vgae import VGAE
+from .netmf import NetMf
 
-modellist = [GraphFactorization, GraRep, HOPE, LaplacianEigenmaps, LINE, LLE, Node2vec, DeepWalk, SDNE, TADW, GCN, GAE, VGAE]
+modellist = [GraphFactorization, GraRep, HOPE, LaplacianEigenmaps, LINE, LLE, Node2vec, DeepWalk, SDNE, TADW, GCN, GAE, VGAE, NetMf]
 modeldict = {Cls.__name__.lower(): Cls for Cls in modellist}
 modeldict.update({Cls.othername.lower(): Cls for Cls in modellist if 'othername' in Cls.__dict__})
